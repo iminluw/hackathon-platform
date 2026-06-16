@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Platforma Hakatonov</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; background: #0f172a; color: #f8fafc; padding: 20px; }
+        .header { background: #1e293b; padding: 20px; border-radius: 8px; display: flex; gap: 10px; margin-bottom: 20px; }
+        button { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #2563eb; }
+        .box { background: #1e293b; padding: 20px; border-radius: 8px; display: none; }
+        .active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; border-bottom: 1px solid #334155; text-align: left; }
+        th { color: #3b82f6; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <b style="font-size: 20px; color: #3b82f6; margin-right: 20px;">🚀 HACKATHON.DEV</b>
+        <button onclick="show('tab1')">Главная</button>
+        <button onclick="show('tab2')">Команды</button>
+        <button onclick="show('tab3')">Инфраструктура (Docker / СУБД)</button>
+    </div>
+
+    <div id="tab1" class="box active">
+        <h2>Текущее мероприятие: Всероссийский IT-Хакатон 2026</h2>
+        <p><b>Статус платформы:</b> <span style="color:#10b981">Запущено в контейнере</span></p>
+        <p><b>Описание:</b> Автоматизированная система проведения соревнований с мгновенным деплоем окружения.</p>
+    </div>
+
+    <div id="tab2" class="box">
+        <h2>Список зарегистрированных команд</h2>
+        <table>
+            <tr><th>Название</th><th>Проект</th><th>Стек</th><th>Репозиторий</th></tr>
+            <tr><td>DevOps_Gurus</td><td>Система авто-деплоя</td><td>Python / Docker</td><td><span style="color:#10b981">Подключен</span></td></tr>
+            <tr><td>Cyber_Cooks</td><td>Платформа тестирования</td><td>Node.js / PostgreSQL</td><td><span style="color:#10b981">Подключен</span></td></tr>
+        </table>
+    </div>
+
+    <div id="tab3" class="box">
+        <h2>Мониторинг серверной части (Production Environment)</h2>
+        <p>🐳 <b>Docker-контейнер бэкенда:</b> <span style="color:#10b981">RUNNING (Порт 8000)</span></p>
+        <p>🐘 <b>База данных PostgreSQL:</b> <span style="color:#10b981">CONNECTED (Порт 5432)</span></p>
+        <p>🌐 <b>Веб-сервер Nginx:</b> <span style="color:#10b981">ACTIVE (Порт 80)</span></p>
+    </div>
+
+    <script>
+        function show(id) {
+            document.getElementById('tab1').classList.remove('active');
+            document.getElementById('tab2').classList.remove('active');
+            document.getElementById('tab3').classList.remove('active');
+            document.getElementById(id).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
