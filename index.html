@@ -1,59 +1,174 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="utf-8">
-    <title>Platforma Hakatonov</title>
+    <title>DevOps Панель управления виртуальными хакатонами</title>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #0f172a; color: #f8fafc; padding: 20px; }
-        .header { background: #1e293b; padding: 20px; border-radius: 8px; display: flex; gap: 10px; margin-bottom: 20px; }
-        button { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        body { font-family: sans-serif; margin: 0; background: #0f172a; color: #f8fafc; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Боковое меню в стиле CustomTkinter */
+        .sidebar { width: 240px; background: #1e293b; padding: 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: 2px 0 5px rgba(0,0,0,0.2); }
+        .logo { font-size: 18px; font-weight: bold; color: #3b82f6; margin-bottom: 20px; text-align: center; }
+        
+        button { background: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: left; transition: 0.2s; }
         button:hover { background: #2563eb; }
-        .box { background: #1e293b; padding: 20px; border-radius: 8px; display: none; }
-        .active { display: block; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; border-bottom: 1px solid #334155; text-align: left; }
-        th { color: #3b82f6; }
+        button.active-btn { background: #1d4ed8; border-left: 4px solid #60a5fa; }
+        
+        /* Контентная зона */
+        .content { flex: 1; padding: 40px; overflow-y: auto; }
+        .box { background: #1e293b; padding: 25px; border-radius: 8px; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .box.active { display: block; }
+        
+        h2 { margin-top: 0; color: #f1f5f9; }
+        .card-text { line-height: 1.8; color: #cbd5e1; }
+        
+        /* Стили для мониторинга */
+        .monitor-container { display: flex; gap: 20px; margin-top: 20px; }
+        .metric-card { flex: 1; background: #0f172a; padding: 30px; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; border-top: 5px solid #10b981; }
+        .metric-card.ram { border-top-color: #3b82f6; }
+        .metric-val { font-size: 32px; margin-top: 10px; }
+        
+        /* Таблица СУБД */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #334155; border-radius: 6px; overflow: hidden; }
+        th, td { padding: 14px; text-align: left; }
+        th { background: #475569; color: #3b82f6; font-weight: bold; }
+        td { border-bottom: 1px solid #475569; color: #e2e8f0; }
+        
+        /* Лог-консоль */
+        .console { background: #000; color: #10b981; font-family: 'Courier New', monospace; padding: 20px; border-radius: 6px; height: 300px; overflow-y: auto; white-space: pre-wrap; margin-top: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <b style="font-size: 20px; color: #3b82f6; margin-right: 20px;">🚀 HACKATHON.DEV</b>
-        <button onclick="show('tab1')">Главная</button>
-        <button onclick="show('tab2')">Команды</button>
-        <button onclick="show('tab3')">Инфраструктура (Docker / СУБД)</button>
+    <!-- БОКОВОЕ МЕНЮ -->
+    <div class="sidebar">
+        <div class="logo">🚀 HACKATHON.AUTO</div>
+        <button id="b1" class="active-btn" onclick="show('tab1', 'b1')">Главная</button>
+        <button id="b2" onclick="show('tab2', 'b2')">Команды & СУБД</button>
+        <button id="b3" onclick="show('tab3', 'b3')">Логи развертывания CI/CD</button>
+        <button id="b4" onclick="show('tab4', 'b4')">Генератор Манифестов</button>
+        <button id="b5" onclick="show('tab5', 'b5')">Мониторинг сервера</button>
     </div>
 
-    <div id="tab1" class="box active">
-        <h2>Текущее мероприятие: Всероссийский IT-Хакатон 2026</h2>
-        <p><b>Статус платформы:</b> <span style="color:#10b981">Запущено в контейнере</span></p>
-        <p><b>Описание:</b> Автоматизированная система проведения соревнований с мгновенным деплоем окружения.</p>
+    <!-- КОНТЕНТ -->
+    <div class="content">
+        <!-- 1. ГЛАВНАЯ -->
+        <div id="tab1" class="box active">
+            <h2>Мониторинг виртуальной платформы</h2>
+            <p class="card-text">
+                <b>Статус мастер-узла:</b> <span style="color:#10b981">RUNNING</span><br>
+                <b>Текущая СУБД:</b> Реляционная PostgreSQL 15 / Изолированный контейнер<br>
+                <b>Среда оркестрации:</b> Успешно развернута через Docker Compose
+            </p>
+        </div>
+
+        <!-- 2. СУБД И КОМАНДЫ -->
+        <div id="tab2" class="box">
+            <h2>Управление командами (Запросы к СУБД)</h2>
+            <table>
+                <thead>
+                    <tr><th>Команда</th><th>Проект</th><th>Стек</th><th>Статус</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>DevOps_Champs</td><td>Динамическое оркерирование контейнеров</td><td>Python / Docker</td><td><span style="color:#10b981">Развернуто</span></td></tr>
+                    <tr><td>Cyber_Gurus</td><td>Авто-развертывание тестовых сред</td><td>Go / Kubernetes</td><td><span style="color:#10b981">Развернуто</span></td></tr>
+                    <tr><td>Nginx_Force</td><td>Балансировщик микросервисной шины</td><td>C++ / Nginx</td><td><span style="color:#10b981">Развернуто</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 3. СИМУЛЯЦИЯ CI/CD -->
+        <div id="tab3" class="box">
+            <h2>Логи конвейера сборки (CI/CD Pipeline)</h2>
+            <button onclick="runPipeline()" style="background: #10b981;">Запустить деплой платформы</button>
+            <div id="logConsole" class="console">Система готова к сборке окружения. Нажмите кнопку выше...</div>
+        </div>
+
+        <!-- 4. ГЕНЕРАТОР DOCKER-КОДА -->
+        <div id="tab4" class="box">
+            <h2>Авто-генерация Docker конфигураций</h2>
+            <div class="console" style="color: #60a5fa; height: auto;">version: '3.8'
+
+services:
+  hackathon_app:
+    build: ./app
+    container_name: main_platform
+    ports:
+      - '8000:8000'
+    depends_on:
+      - hackathon_db
+
+  hackathon_db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: hack_db
+      POSTGRES_USER: admin</div>
+        </div>
+
+        <!-- 5. ЖИВОЙ МОНИТОРИНГ CPU И RAM -->
+        <div id="tab5" class="box">
+            <h2>Мониторинг ресурсов хостинга в реальном времени</h2>
+            <div class="monitor-container">
+                <div class="metric-card" style="color: #10b981;">
+                    Загрузка CPU
+                    <div id="cpuVal" class="metric-val">-- %</div>
+                </div>
+                <div class="metric-card ram" style="color: #3b82f6;">
+                    Использование RAM
+                    <div id="ramVal" class="metric-val">-- %</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="tab2" class="box">
-        <h2>Список зарегистрированных команд</h2>
-        <table>
-            <tr><th>Название</th><th>Проект</th><th>Стек</th><th>Репозиторий</th></tr>
-            <tr><td>DevOps_Gurus</td><td>Система авто-деплоя</td><td>Python / Docker</td><td><span style="color:#10b981">Подключен</span></td></tr>
-            <tr><td>Cyber_Cooks</td><td>Платформа тестирования</td><td>Node.js / PostgreSQL</td><td><span style="color:#10b981">Подключен</span></td></tr>
-        </table>
-    </div>
-
-    <div id="tab3" class="box">
-        <h2>Мониторинг серверной части (Production Environment)</h2>
-        <p>🐳 <b>Docker-контейнер бэкенда:</b> <span style="color:#10b981">RUNNING (Порт 8000)</span></p>
-        <p>🐘 <b>База данных PostgreSQL:</b> <span style="color:#10b981">CONNECTED (Порт 5432)</span></p>
-        <p>🌐 <b>Веб-сервер Nginx:</b> <span style="color:#10b981">ACTIVE (Порт 80)</span></p>
-    </div>
-
+    <!-- СКРИПТЫ АНИМАЦИИ -->
     <script>
-        function show(id) {
-            document.getElementById('tab1').classList.remove('active');
-            document.getElementById('tab2').classList.remove('active');
-            document.getElementById('tab3').classList.remove('active');
-            document.getElementById(id).classList.add('active');
+        // Переключение вкладок
+        function show(tabId, btnId) {
+            document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active-btn'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById(btnId).classList.add('active-btn');
         }
-    </script>
 
+        // Логи CI/CD
+        function runPipeline() {
+            const consoleEl = document.getElementById('logConsole');
+            consoleEl.innerHTML = '';
+            const logs = [
+                "[INFO] Starting Pipeline for Virtual Hackathon Platform...",
+                "[STAGE] Pulling base images: python:3.10-slim and postgres:15-alpine...",
+                "[STAGE] Successfully downloaded docker images.",
+                "[STAGE] Building application layout context...",
+                "[INFO] Installing server dependencies from requirements.txt...",
+                "[SUCCESS] Pip environment successfully isolated.",
+                "[STAGE] Running database schema migrations...",
+                "[SQL] CREATE TABLE participants... SUCCESS",
+                "[SQL] CREATE TABLE expert_scores... SUCCESS",
+                "[STAGE] Linking isolated containers via bridge-network...",
+                "[SUCCESS] Platform successfully automated and deployed on port :8000!"
+            ];
+            let i = 0;
+            function printLine() {
+                if (i < logs.length) {
+                    consoleEl.innerHTML += logs[i] + "\n";
+                    consoleEl.scrollTop = consoleEl.scrollHeight;
+                    i++;
+                    setTimeout(printLine, 250);
+                }
+            }
+            printLine();
+        }
+
+        // Мониторинг процессора и памяти
+        setInterval(() => {
+            if (document.getElementById('tab5').classList.contains('active')) {
+                const cpu = Math.floor(Math.random() * (45 - 15 + 1)) + 15;
+                const ram = Math.floor(Math.random() * (65 - 40 + 1)) + 40;
+                document.getElementById('cpuVal').innerText = cpu + " %";
+                document.getElementById('ramVal').innerText = ram + " %";
+            }
+        }, 1500);
+    </script>
 </body>
 </html>
